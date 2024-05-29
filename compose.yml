@@ -23,16 +23,18 @@ services:
 
   producer:
     build: ./producer
+    restart: always
     depends_on:
       - kafka
     environment:
       KAFKA_BROKER: kafka:9092
+    ports:
+      - "3000:3000"
 
   consumer:
     build: ./consumer
+    restart: always
     depends_on:
       - kafka
     environment:
       KAFKA_BROKER: kafka:9092
-
-
