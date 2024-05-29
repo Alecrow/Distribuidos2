@@ -38,3 +38,6 @@ services:
       - kafka
     environment:
       KAFKA_BROKER: kafka:9092
+
+
+
