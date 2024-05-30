@@ -1,0 +1,17 @@
+{
+  "name": "notificaciones",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "kafkajs": "^2.2.4",
+    "nodemailer": "^6.9.13"
+  }
+}
