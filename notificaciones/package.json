@@ -1,9 +1,9 @@
 {
   "name": "notificaciones",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "notificaciones.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node notificaciones.js"
   },
   "keywords": [],
   "author": "",
