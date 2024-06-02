@@ -9,43 +9,65 @@ const kafka = new Kafka({
 const consumer = kafka.consumer({ groupId: 'procesamiento-group' });
 const producer = kafka.producer();
 
-const start = async () => {
-  await consumer.connect();
-  await producer.connect();
-  await consumer.subscribe({ topic: 'procesamiento', fromBeginning: true });
+const processMessage = async (message, currentTopic) => {
+  const data = JSON.parse(message.value.toString());
 
-  await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
-      const data = JSON.parse(message.value.toString());
+  switch (currentTopic) {
+    case 'procesamiento':
       data.estado = 'recibido';
+      console.log(`CONSUMER: ${JSON.stringify(data)}`);
       await producer.send({
         topic: 'recibido',
         messages: [{ value: JSON.stringify(data) }]
       });
-      // Simulación de procesamiento en paralelo
-      setTimeout(async () => {
-        data.estado = 'preparando';
-        await producer.send({
-          topic: 'preparando',
-          messages: [{ value: JSON.stringify(data) }]
-        });
+      console.log(`PRODUCER: ${JSON.stringify(data)}`);
+      break;
+    case 'recibido':
+      data.estado = 'preparando';
+      console.log(`CONSUMER: ${JSON.stringify(data)}`);
+      await producer.send({
+        topic: 'preparando',
+        messages: [{ value: JSON.stringify(data) }]
+      });
+      console.log(`PRODUCER: ${JSON.stringify(data)}`);
+      break;
+    case 'preparando':
+      data.estado = 'entregando';
+      console.log(`CONSUMER: ${JSON.stringify(data)}`);
+      await producer.send({
+        topic: 'entregando',
+        messages: [{ value: JSON.stringify(data) }]
+      });
+      console.log(`PRODUCER: ${JSON.stringify(data)}`);
+      break;
+    case 'entregando':
+      data.estado = 'finalizado';
+      console.log(`CONSUMER: ${JSON.stringify(data)}`);
+      await producer.send({
+        topic: 'finalizado',
+        messages: [{ value: JSON.stringify(data) }]
+      });
+      console.log(`PRODUCER: ${JSON.stringify(data)}`);
+      break;
+    default:
+      console.error(`Unhandled topic: ${currentTopic}`);
+  }
+};
 
-        setTimeout(async () => {
-          data.estado = 'entregando';
-          await producer.send({
-            topic: 'entregando',
-            messages: [{ value: JSON.stringify(data) }]
-          });
+const start = async () => {
+  await consumer.connect();
+  await producer.connect();
 
-          setTimeout(async () => {
-            data.estado = 'finalizado';
-            await producer.send({
-              topic: 'finalizado',
-              messages: [{ value: JSON.stringify(data) }]
-            });
-          }, 1000); // Simula el tiempo de entrega
-        }, 1000); // Simula el tiempo de preparación
-      }, 1000); // Simula el tiempo de recepción
+  await consumer.subscribe({ topic: 'procesamiento', fromBeginning: true });
+  await consumer.subscribe({ topic: 'recibido', fromBeginning: true });
+  await consumer.subscribe({ topic: 'preparando', fromBeginning: true });
+  await consumer.subscribe({ topic: 'entregando', fromBeginning: true });
+
+  await consumer.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      const data = JSON.parse(message.value.toString());
+      console.log(`CONSUMER: ${JSON.stringify(data)}`);
+      await processMessage(message, topic);
     },
   });
 };
