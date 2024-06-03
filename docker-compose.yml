@@ -6,6 +6,7 @@ services:
   kafka:
     image: bitnami/kafka:latest
     environment:
+      - KAFKA_CREATE_TOPICS=procesamiento:1:1,recibido:1:1,preparando:1:1,entregando:1:1,finalizado:1:1
       - KAFKA_CFG_PROCESS_ROLES=broker,controller
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
@@ -16,7 +17,6 @@ services:
       - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - KAFKA_CFG_NODE_ID=1
       - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CREATE_TOPICS=procesamiento:1:1,recibido:1:1,preparando:1:1,entregando:1:1,finalizado:1:1
     networks:
       - kafka-net
     ports:

@@ -14,6 +14,7 @@ const processMessage = async (message, currentTopic) => {
 
   switch (currentTopic) {
     case 'procesamiento':
+      //delay(2000);
       data.estado = 'recibido';
       console.log(`CONSUMER: ${JSON.stringify(data)}`);
       await producer.send({
@@ -23,6 +24,7 @@ const processMessage = async (message, currentTopic) => {
       console.log(`PRODUCER: ${JSON.stringify(data)}`);
       break;
     case 'recibido':
+      //delay(2000);
       data.estado = 'preparando';
       console.log(`CONSUMER: ${JSON.stringify(data)}`);
       await producer.send({
@@ -32,6 +34,7 @@ const processMessage = async (message, currentTopic) => {
       console.log(`PRODUCER: ${JSON.stringify(data)}`);
       break;
     case 'preparando':
+      //delay(2000);
       data.estado = 'entregando';
       console.log(`CONSUMER: ${JSON.stringify(data)}`);
       await producer.send({
@@ -41,6 +44,7 @@ const processMessage = async (message, currentTopic) => {
       console.log(`PRODUCER: ${JSON.stringify(data)}`);
       break;
     case 'entregando':
+      //delay(2000);
       data.estado = 'finalizado';
       console.log(`CONSUMER: ${JSON.stringify(data)}`);
       await producer.send({

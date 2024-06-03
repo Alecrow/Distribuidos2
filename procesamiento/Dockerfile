@@ -2,8 +2,9 @@
 FROM node:14
 
 WORKDIR /app
-COPY package.json ./
 RUN npm install
+COPY package.json ./
+COPY package-lock.json ./
 COPY . .
 
 CMD ["node", "procesamiento.js"]

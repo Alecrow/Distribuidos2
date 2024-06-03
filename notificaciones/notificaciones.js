@@ -13,14 +13,14 @@ const consumer = kafka.consumer({ groupId: 'notificaciones-group' });
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'your-email@gmail.com',
-    pass: 'your-email-password'
+    user: 'tareadystry@gmail.com',
+    pass: 'gjlb xbbf osvy nwvk'
   }
 });
 
 const sendEmail = (data) => {
   const mailOptions = {
-    from: 'your-email@gmail.com',
+    from: 'tareadystry@gmail.com',
     to: data.correo,
     subject: 'Estado de su producto',
     text: JSON.stringify(data, null, 2)
