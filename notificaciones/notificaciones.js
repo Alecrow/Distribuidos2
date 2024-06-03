@@ -36,7 +36,12 @@ const sendEmail = (data) => {
 };
 
 const notifyAPI = async (data) => {
-  await axios.get('http://your-api-endpoint', { params: data });
+  try {
+    const response = await axios.get('http://localhost:3001/', { params: data });
+    console.log('API Response:', response.data);
+  } catch (error) {
+    console.error('Error making GET request:', error);
+  }
 };
 
 const start = async () => {
